@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import newRequest from "../utils/newRequest";
+import { Modal, Spin } from "antd";
+import { ExclamationCircleFilled } from '@ant-design/icons';
 
 const Container = styled.div`
   display: flex;
@@ -41,14 +43,17 @@ const Delete = styled.span`
   display: flex;
   position: absolute;
   right:0;
-  color: ${({ theme }) => theme.text}
+  color: ${({ theme }) => theme.text};
+  cursor: pointer;
 `
 
 
 const Comment = ({ comment, uid }) => {
   // 评论人的comment
   const [channel, setChannel] = useState({});
-  const [video, setVideo] = useState({})
+  const [video, setVideo] = useState({});
+  const [rend, setRend] = useState(true);
+  const { confirm } = Modal;
   useEffect(() => {
     const fetchComment = async () => {
       const res = await newRequest.get(`/users/find/${comment.userId}`);
@@ -58,22 +63,43 @@ const Comment = ({ comment, uid }) => {
     };
     fetchComment();
   }, [comment.userId, comment.videoId]);
+
+  const showConfirm = () => {
+    confirm({
+      title: 'Do you want to delete this comment?',
+      icon: <ExclamationCircleFilled />,
+      content: 'Once deleted, the comment cannot be repaired',
+      async onOk() {
+        await newRequest.delete(`/comments/${comment._id}`);
+        // dispatch(deletComment());
+        setRend(false);
+      },
+      onCancel() {
+      },
+    });
+  };
+
+
+
   // 代码没问题，可能是连接数据库太慢了
   return (
-    <Container>
-      <Avatar src={channel.img} />
-      <Details>
-        <Name>
-          {channel.name} <Date>1 day ago</Date>
-        </Name>
-        <Text>
-          {comment.desc}
-        </Text>
-      </Details>
-      {uid === comment.userId || uid === video.userId ?
-        (<Delete>X</Delete>) : (<></>)
-      }
-    </Container>
+    rend &&
+    <>
+      <Container>
+        <Avatar src={channel.img} />
+        <Details>
+          <Name>
+            {channel.name} <Date>1 day ago</Date>
+          </Name>
+          <Text>
+            {comment.desc}
+          </Text>
+        </Details>
+        {uid === comment.userId || uid === video.userId ?
+          (<Delete onClick={showConfirm} >X</Delete>) : (<></>)
+        }
+      </Container>
+    </>
   );
 };
 

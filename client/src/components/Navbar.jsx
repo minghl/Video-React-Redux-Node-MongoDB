@@ -16,6 +16,7 @@ const Container = styled.div`
   top: 0;
   background-color: ${({ theme }) => theme.bgLighter};
   height: 56px;
+  z-index:100;
 `;
 
 const Wrapper = styled.div`
@@ -87,7 +88,6 @@ const Navbar = () => {
   const handleLogout = async (e) => {
     e.preventDefault();
     dispatch(logout());
-    console.log(currentUser, 'cu');
   }
 
   const items = [

@@ -50,7 +50,6 @@ const Comments = ({ videoId }) => {
 
   const handleComment = async (e) => {
     if (e.key === 'Enter' && e.target.value.trim() !== '' && currentUser) {
-      console.log(e, 'e');
       const res = await newRequest.post(`/comments`, {
         desc: e.target.value,
         userId: currentUser._id,
@@ -61,7 +60,6 @@ const Comments = ({ videoId }) => {
         videoId: res.data.videoId,
         desc: res.data.desc,
       }
-      console.log(data, 'res');
       dispatch(sendComment(data));
       setPost(data);
       e.target.value = "";

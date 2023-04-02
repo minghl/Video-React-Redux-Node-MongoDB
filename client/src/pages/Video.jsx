@@ -14,6 +14,7 @@ import { dislike, fetchSuccess, like } from "../redux/videoSlice";
 import { format } from "timeago.js";
 import { subscription } from "../redux/userSlice";
 import { Recommendation } from "../components/Recommendation.jsx";
+import _ from 'lodash';
 
 const Container = styled.div`
   display: flex;
@@ -124,8 +125,15 @@ const Video = () => {
   const path = useLocation().pathname.split("/")[2];
   const [channel, setChannel] = useState({});
   const [samepeople, setSamePeople] = useState(false);
+  const debounce = _.debounce(async () => {
+    try {
+      await newRequest.put(`videos/view/${path}`);
+    } catch (err) {
+    }
+  }, 500)
 
   useEffect(() => {
+    console.log(currentVideo, 'cv');
     const fetchData = async () => {
       try {
         const videoRes = await newRequest.get(`videos/find/${path}`);
@@ -137,6 +145,11 @@ const Video = () => {
     }
     fetchData();
   }, [path, dispatch, currentUser, currentVideo])
+
+  useEffect(() => {
+    // 防抖防止渲染两次useEffect
+    debounce()
+  }, [])
 
   const handleLike = async () => {
     await newRequest.put(`/users/like/${currentVideo._id}`);

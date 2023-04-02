@@ -22,7 +22,7 @@ const connect = () => {
 
 //middlewares
 // 跨域放这里了
-app.use(cors({ origin: "http://localhost:3000", credentials: true }))
+app.use(cors())
 app.use(cookieParser());
 // For loading the json body
 app.use(express.json());

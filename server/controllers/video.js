@@ -1,6 +1,9 @@
 import Video from "../models/Video.js";
 import { createError } from "../error.js";
 import User from "../models/User.js";
+import pkg from "lodash";
+
+const { uniqWith, isEqual } = pkg;
 
 export const addVideo = async (req, res, next) => {
     const newVideo = new Video({
@@ -14,6 +17,7 @@ export const addVideo = async (req, res, next) => {
         next(err);
     }
 }
+
 
 export const updateVideo = async (req, res, next) => {
     try {
@@ -74,11 +78,25 @@ export const addView = async (req, res, next) => {
         next(err);
     }
 }
+
+export const redView = async (req, res, next) => {
+    try {
+        const video = await Video.findByIdAndUpdate(req.params.id,
+            {
+                $inc: { views: -1 }
+            });
+        res.status(200).json("The view has been increased")
+    } catch (err) {
+        next(err);
+    }
+}
+
 export const random = async (req, res, next) => {
     try {
         // mongodb奇怪的方法
         const videos = await Video.aggregate([{ $sample: { size: 40 } }]);
-        res.status(200).json(videos);
+        const data = uniqWith(videos, isEqual)
+        res.status(200).json(data);
     } catch (err) {
         next(err);
     }
@@ -87,7 +105,9 @@ export const trend = async (req, res, next) => {
     try {
         // sort也是mongodb的方法，-1是最受欢迎的，1是最不受欢迎的
         const videos = await Video.find().sort({ views: -1 });
-        res.status(200).json(videos)
+        const data = uniqWith(videos, isEqual)
+        res.status(200).json(data)
+
     } catch (err) {
         next(err);
     }
@@ -103,8 +123,10 @@ export const sub = async (req, res, next) => {
                 return Video.find({ userId: channelId })
             })
         );
+        const data = uniqWith(list.flat(), isEqual)
+        console.log(data);
         // return these list
-        res.status(200).json(list.flat().sort((a, b) => b.createdAt - a.createdAt))
+        res.status(200).json(data.sort((a, b) => b.createdAt - a.createdAt))
     } catch (err) {
         next(err);
     }
