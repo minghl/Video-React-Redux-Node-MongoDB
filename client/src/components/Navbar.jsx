@@ -3,9 +3,13 @@ import styled from "styled-components";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import { Upload } from "./Upload";
+import './index.css';
+import { Dropdown } from 'antd';
+import newRequest from "../utils/newRequest";
+import { logout } from "../redux/userSlice";
 
 const Container = styled.div`
   position: sticky;
@@ -77,7 +81,25 @@ const Navbar = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    dispatch(logout());
+    console.log(currentUser, 'cu');
+  }
+
+  const items = [
+    {
+      key: '1',
+      label: (
+        <div onClick={handleLogout}>
+          Log out
+        </div>
+      ),
+    }]
+
 
   return (
     <>
@@ -85,17 +107,34 @@ const Navbar = () => {
         <Wrapper>
           <Search>
             <Input placeholder="Search" onChange={(e) => { setQ(e.target.value) }} />
-            <SearchOutlinedIcon onClick={() => navigate(`/search?q=${q}`)} />
+            <SearchOutlinedIcon className="button" onClick={() => navigate(`/search?q=${q}`)} />
           </Search>
           {currentUser ? (
             <User>
-              <VideoCallOutlinedIcon onClick={() => setOpen(true)} />
-              <Avatar src={currentUser.img} />
+              <VideoCallOutlinedIcon className="button" onClick={() => setOpen(true)} />
+              <Dropdown
+                menu={{
+                  items,
+                }}
+                placement="bottomLeft"
+                arrow={{
+                  pointAtCenter: true,
+                }}
+                trigger={["click"]}
+              >
+                <Avatar className="button" src={currentUser.img} />
+              </Dropdown>
               {currentUser.name}
             </User>
           ) : (
             <Link to="signin" style={{ textDecoration: "none" }}>
-              <Button>
+              <Button menu={{
+                items,
+              }}
+                placement="bottomLeft"
+                arrow={{
+                  pointAtCenter: true,
+                }}>
                 <AccountCircleOutlinedIcon />
                 SIGN IN
               </Button>

@@ -16,6 +16,7 @@ const UserSchema = new mongoose.Schema({
     },
     img: {
         type: String,
+        default: "https://firebasestorage.googleapis.com/v0/b/video-e2c0b.appspot.com/o/Screenshot%202023-04-01%20at%2020.41.09.png?alt=media&token=025428fe-43e8-48b0-a926-46565e9c0aaa"
     },
     subscribers: {
         type: Number,

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import app from '../firebase';
+
+
 import {
   getStorage,
   ref,
@@ -150,7 +152,7 @@ export const Upload = ({ setOpen }) => {
   return (
     <Container>
       <Wrapper>
-        <Close>X</Close>
+        <Close onClick={() => setOpen(false)}>X</Close>
         <Title>Upload a New Video</Title>
         <Label>Video:</Label>
         {/* accept only video */}

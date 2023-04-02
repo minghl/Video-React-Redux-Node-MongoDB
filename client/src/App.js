@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Video from "./pages/Video";
 import SignIn from "./pages/SignIn";
 import Search from "./pages/Search";
+import Undev from "./pages/Undev";
 
 const Container = styled.div`
   display: flex;
@@ -42,6 +43,7 @@ function App() {
                   <Route path="video">
                     <Route path=":id" element={<Video />} />
                   </Route>
+                  <Route path="undev" element={<Undev />} />
                 </Route>
               </Routes>
             </Wrapper>

@@ -8,6 +8,7 @@ const router = express.Router();
 router.post("/", verifyToken, addVideo)
 router.put("/:id", verifyToken, addVideo)
 router.delete("/:id", verifyToken, addVideo)
+// find the video info
 router.get("/find/:id", getVideo)
 router.put("/view/:id", addView)
 router.get("/trend", trend)

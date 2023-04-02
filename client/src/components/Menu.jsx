@@ -90,49 +90,55 @@ const Menu = ({ darkMode, setDarkMode }) => {
         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
           <Logo>
             <Img src={LamaTube} />
-            LamaTube
+            MinghaoTube
           </Logo>
         </Link>
-        <Item>
-          <HomeIcon />
-          Home
-        </Item>
-        <Link to="trends" style={{textDecoration:"none", color:"inherit"}}>
-        <Item>
-          <ExploreOutlinedIcon />
-          Explore
-        </Item>
+        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <HomeIcon />
+            Home
+          </Item>
         </Link>
-        
-        <Link to="subscriptions" style={{textDecoration:"none", color:"inherit"}}>
-        <Item>
-          <SubscriptionsOutlinedIcon />
-          Subscriptions
-        </Item>
+        <Link to="trends" style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <ExploreOutlinedIcon />
+            Explore
+          </Item>
+        </Link>
+
+        <Link to="subscriptions" style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <SubscriptionsOutlinedIcon />
+            Subscriptions
+          </Item>
         </Link>
         <Hr />
-        <Item>
-          <VideoLibraryOutlinedIcon />
-          Library
-        </Item>
-        <Item>
-          <HistoryOutlinedIcon />
-          History
-        </Item>
+        <Link to="undev" style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <VideoLibraryOutlinedIcon />
+            Library
+          </Item>
+        </Link>
+        <Link to="undev" style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <HistoryOutlinedIcon />
+            History
+          </Item>
+        </Link>
         <Hr />
-        {!currentUser && 
+        {!currentUser &&
           <>
-        <Login>
-          Sign in to like videos, comment, and subscribe.
-          <Link to="signin" style={{textDecoration:"none"}}>
-            <Button>
-              <AccountCircleOutlinedIcon />
-              SIGN IN
-            </Button>
-          </Link>
-        </Login>
-        <Hr />
-        </>
+            <Login>
+              Sign in to like videos, comment, and subscribe.
+              <Link to="signin" style={{ textDecoration: "none" }}>
+                <Button>
+                  <AccountCircleOutlinedIcon />
+                  SIGN IN
+                </Button>
+              </Link>
+            </Login>
+            <Hr />
+          </>
         }
         <Title>BEST OF LAMATUBE</Title>
         <Item>
@@ -155,23 +161,31 @@ const Menu = ({ darkMode, setDarkMode }) => {
           <ArticleOutlinedIcon />
           News
         </Item>
-        <Item>
-          <LiveTvOutlinedIcon />
-          Live
-        </Item>
+        <Link to="undev" style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <LiveTvOutlinedIcon />
+            Live
+          </Item>
+        </Link>
         <Hr />
-        <Item>
-          <SettingsOutlinedIcon />
-          Settings
-        </Item>
-        <Item>
-          <FlagOutlinedIcon />
-          Report
-        </Item>
-        <Item>
-          <HelpOutlineOutlinedIcon />
-          Help
-        </Item>
+        <Link to="undev" style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <SettingsOutlinedIcon />
+            Settings
+          </Item>
+        </Link>
+        <Link to="undev" style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <FlagOutlinedIcon />
+            Report
+          </Item>
+        </Link>
+        <Link to="undev" style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <HelpOutlineOutlinedIcon />
+            Help
+          </Item>
+        </Link>
         <Item onClick={() => setDarkMode(!darkMode)}>
           <SettingsBrightnessOutlinedIcon />
           {darkMode ? "Light" : "Dark"} Mode

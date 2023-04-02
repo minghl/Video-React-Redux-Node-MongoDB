@@ -7,7 +7,6 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined";
 import Comments from "../components/Comments.jsx";
-import Card from "../components/Card";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import newRequest from "../utils/newRequest";
@@ -124,20 +123,20 @@ const Video = () => {
 
   const path = useLocation().pathname.split("/")[2];
   const [channel, setChannel] = useState({});
+  const [samepeople, setSamePeople] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const videoRes = await newRequest.get(`videos/find/${path}`);
         const channelRes = await newRequest.get(`/users/find/${videoRes.data.userId}`);
+        currentUser._id === currentVideo.userId ? setSamePeople(true) : setSamePeople(false);
         setChannel(channelRes.data);
         dispatch(fetchSuccess(videoRes.data));
-      } catch (err) {
-
-      }
+      } catch (err) { }
     }
     fetchData();
-  }, [path, dispatch])
+  }, [path, dispatch, currentUser, currentVideo])
 
   const handleLike = async () => {
     await newRequest.put(`/users/like/${currentVideo._id}`);
@@ -160,7 +159,7 @@ const Video = () => {
     <Container>
       <Content>
         <VideoWrapper>
-          <VideoFrame src={currentVideo.videoUrl} controls />
+          <VideoFrame src={currentVideo && currentVideo.videoUrl} controls />
         </VideoWrapper>
         <Title>{currentVideo && currentVideo.title}</Title>
         <Details>
@@ -202,15 +201,22 @@ const Video = () => {
               </Description>
             </ChannelDetail>
           </ChannelInfo>
-          <Subscribe onClick={handleSub}>{currentUser && channel && currentUser.subscribedUsers?.includes(channel._id)
-            ? "SUBSCRIBED"
-            : "SUBSCRIBE"
-          }</Subscribe>
+
+          {currentUser && channel && currentUser.subscribedUsers?.includes(channel._id)
+            ? (
+              <Subscribe onClick={handleSub} style={{ backgroundColor: "grey" }} disabled={samepeople}>SUBSCRIBED
+              </Subscribe>
+            ) : (
+              <Subscribe onClick={handleSub} disabled={samepeople} >SUBSCRIBE
+              </Subscribe>
+            )
+          }
+
         </Channel>
         <Hr />
-        <Comments videoId={currentVideo._id} />
+        <Comments videoId={currentVideo && currentVideo._id} />
       </Content>
-      <Recommendation tags={currentVideo.tags} />
+      <Recommendation tags={currentVideo && currentVideo.tags} />
     </Container>
   );
 };

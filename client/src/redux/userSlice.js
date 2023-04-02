@@ -22,7 +22,20 @@ export const userSlice = createSlice({
             state.error = true;
         },
         logout: (state) => {
-            state = initialState;
+            state.currentUser = null;
+            state.loading = false;
+            state.error = false;
+        },
+        signupStart: (state) => {
+            state.loading = true;
+        },
+        signupSuccess: (state) => {
+            state.loading = false;
+        },
+        signupFailure: (state) => {
+            state.currentUser = null;
+            state.loading = false;
+            state.error = false;
         },
         subscription: (state, action) => {
             if (state.currentUser.subscribedUsers.includes(action.payload)) {
@@ -39,6 +52,6 @@ export const userSlice = createSlice({
     },
 })
 
-export const { loginStart, loginSuccess, loginFailure, logout, subscription } = userSlice.actions;
+export const { loginStart, loginSuccess, loginFailure, logout, subscription, signupStart, signupSuccess, signupFailure } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Comment from "./Comment";
 import newRequest from "../utils/newRequest.js";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { sendComment } from "../redux/commentSlice";
 
 const Container = styled.div``;
 
@@ -28,30 +29,52 @@ const Input = styled.input`
   width: 100%;
 `;
 
-const Comments = ({videoId}) => {
+const Comments = ({ videoId }) => {
   const { currentUser } = useSelector((state) => state.user);
   const [comments, setComments] = useState([]);
-  useEffect(() => {
-    
-    const fetchComments = async () => {
+  const [post, setPost] = useState({})
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+
+    const fetchComments = async () => {
       try {
         const res = await newRequest.get(`/comments/${videoId}`);
         setComments(res.data);
-        console.log('coments',comments);
-      } catch (err) {}
+      } catch (err) {
+      }
     };
     fetchComments();
-  }, [videoId]);
+  }, [videoId, post]);
 
+
+  const handleComment = async (e) => {
+    if (e.key === 'Enter' && e.target.value.trim() !== '' && currentUser) {
+      console.log(e, 'e');
+      const res = await newRequest.post(`/comments`, {
+        desc: e.target.value,
+        userId: currentUser._id,
+        videoId
+      });
+      const data = {
+        userId: res.data.userId,
+        videoId: res.data.videoId,
+        desc: res.data.desc,
+      }
+      console.log(data, 'res');
+      dispatch(sendComment(data));
+      setPost(data);
+      e.target.value = "";
+    }
+  }
   return (
     <Container>
       <NewComment>
-        <Avatar src={currentUser.img} />
-        <Input placeholder="Add a comment..." />
+        <Avatar src={currentUser && currentUser.img} />
+        <Input placeholder="Enter to add a comment..." onKeyDown={handleComment} />
       </NewComment>
-      {comments.map(comment=>(
-        <Comment key={comment._id} comment={comment}/>
+      {comments.map(comment => (
+        <Comment key={comment._id} comment={comment} uid={currentUser ? currentUser._id : undefined} />
       ))}
     </Container>
   );

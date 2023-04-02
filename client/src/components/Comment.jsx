@@ -6,6 +6,7 @@ const Container = styled.div`
   display: flex;
   gap: 10px;
   margin: 30px 0px;
+  position:relative;
 `;
 
 const Avatar = styled.img`
@@ -36,17 +37,27 @@ const Text = styled.span`
   font-size: 14px;
 `;
 
-const Comment = ({comment}) => {
+const Delete = styled.span`
+  display: flex;
+  position: absolute;
+  right:0;
+  color: ${({ theme }) => theme.text}
+`
+
+
+const Comment = ({ comment, uid }) => {
   // 评论人的comment
   const [channel, setChannel] = useState({});
-
+  const [video, setVideo] = useState({})
   useEffect(() => {
     const fetchComment = async () => {
       const res = await newRequest.get(`/users/find/${comment.userId}`);
+      const vinfo = await newRequest.get(`/videos/find/${comment.videoId}`);
       setChannel(res.data)
+      setVideo(vinfo.data)
     };
     fetchComment();
-  }, [comment.userId]);
+  }, [comment.userId, comment.videoId]);
   // 代码没问题，可能是连接数据库太慢了
   return (
     <Container>
@@ -59,6 +70,9 @@ const Comment = ({comment}) => {
           {comment.desc}
         </Text>
       </Details>
+      {uid === comment.userId || uid === video.userId ?
+        (<Delete>X</Delete>) : (<></>)
+      }
     </Container>
   );
 };
