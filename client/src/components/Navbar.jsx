@@ -8,7 +8,6 @@ import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import { Upload } from "./Upload";
 import './index.css';
 import { Dropdown } from 'antd';
-import newRequest from "../utils/newRequest";
 import { logout } from "../redux/userSlice";
 
 const Container = styled.div`

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import newRequest from "../utils/newRequest";
-import { Modal, Spin } from "antd";
+import { Modal } from "antd";
 import { ExclamationCircleFilled } from '@ant-design/icons';
 
 const Container = styled.div`

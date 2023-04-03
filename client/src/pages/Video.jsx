@@ -119,11 +119,12 @@ const VideoFrame = styled.video`
 
 const Video = () => {
   const { currentUser } = useSelector((state) => state.user);
-  const { currentVideo } = useSelector((state) => state.video);
+  // const { currentVideo } = useSelector((state) => state.video);
   const dispatch = useDispatch();
 
   const path = useLocation().pathname.split("/")[2];
   const [channel, setChannel] = useState({});
+  const [video, setVideo] = useState({});
   const [samepeople, setSamePeople] = useState(false);
   const debounce = _.debounce(async () => {
     try {
@@ -133,32 +134,34 @@ const Video = () => {
   }, 500)
 
   useEffect(() => {
-    console.log(currentVideo, 'cv');
+    // console.log(currentVideo, 'cv');
     const fetchData = async () => {
       try {
         const videoRes = await newRequest.get(`videos/find/${path}`);
         const channelRes = await newRequest.get(`/users/find/${videoRes.data.userId}`);
-        currentUser._id === currentVideo.userId ? setSamePeople(true) : setSamePeople(false);
+        setVideo(videoRes.data)
         setChannel(channelRes.data);
         dispatch(fetchSuccess(videoRes.data));
+        currentUser._id === videoRes.data.userId ? setSamePeople(true) : setSamePeople(false);
+        // console.log('video', video);
       } catch (err) { }
     }
     fetchData();
-  }, [path, dispatch, currentUser, currentVideo])
+  }, [path, dispatch, currentUser, video])
 
   useEffect(() => {
     // 防抖防止渲染两次useEffect
-    debounce()
+    debounce();
   }, [])
 
   const handleLike = async () => {
-    await newRequest.put(`/users/like/${currentVideo._id}`);
+    await newRequest.put(`/users/like/${video._id}`);
     // dispatch的作用就是实时更新页面，改变state
     dispatch(like(currentUser._id));
   }
 
   const handleDislike = async () => {
-    await newRequest.put(`/users/dislike/${currentVideo._id}`);
+    await newRequest.put(`/users/dislike/${video._id}`);
     dispatch(dislike(currentUser._id));
   }
 
@@ -172,23 +175,23 @@ const Video = () => {
     <Container>
       <Content>
         <VideoWrapper>
-          <VideoFrame src={currentVideo && currentVideo.videoUrl} controls />
+          <VideoFrame src={video && video.videoUrl} controls />
         </VideoWrapper>
-        <Title>{currentVideo && currentVideo.title}</Title>
+        <Title>{video && video.title}</Title>
         <Details>
-          <Info>{currentVideo && currentVideo.views} views • {currentVideo && format(currentVideo.createdAt)}</Info>
+          <Info>{video && video.views} views • {video && format(video.createdAt)}</Info>
           <Buttons>
             <Button onClick={handleLike}>
               {/* 这里放？是因为可以最开始没有装载 */}
-              {currentVideo && currentVideo.likes?.includes(currentUser?._id) ? (
+              {video && video.likes?.includes(currentUser?._id) ? (
                 <ThumbUpIcon />
               ) : (
                 <ThumbUpOutlinedIcon />
               )}{" "}
-              {currentVideo && currentVideo.likes?.length}
+              {video && video.likes?.length}
             </Button>
             <Button onClick={handleDislike}>
-              {currentVideo && currentVideo.dislikes?.includes(currentUser?._id) ? (
+              {video && video.dislikes?.includes(currentUser?._id) ? (
                 <ThumbDownIcon />
               ) : (
                 <ThumbDownOffAltOutlinedIcon />
@@ -210,7 +213,7 @@ const Video = () => {
               <ChannelName>{channel && channel.name}</ChannelName>
               <ChannelCounter>{channel && channel.subscribers} subscribers</ChannelCounter>
               <Description>
-                {currentVideo && currentVideo.desc}
+                {video && video.desc}
               </Description>
             </ChannelDetail>
           </ChannelInfo>
@@ -227,9 +230,9 @@ const Video = () => {
 
         </Channel>
         <Hr />
-        <Comments videoId={currentVideo && currentVideo._id} />
+        <Comments videoId={video && video._id} />
       </Content>
-      <Recommendation tags={currentVideo && currentVideo.tags} />
+      <Recommendation tags={video && video.tags} />
     </Container>
   );
 };
