@@ -11,14 +11,7 @@ const Container = styled.div`
   flex-wrap: wrap;
 `;
 
-const Text = styled.div`
-color: ${({ theme }) => theme.text};
-left:50%;
-transform: translateX(-50%);
-bottom: 10px;
-position: absolute;
-white-space:nowrap;
-`
+
 
 
 const Home = ({ type, tag }) => {
@@ -59,7 +52,6 @@ const Home = ({ type, tag }) => {
 
         </Container>
       </Spin >
-      <Text>All materials on this website are for learning purposes. If there is any infringement, please contact me. Thank you very much.</Text>
     </div>
   );
 };
