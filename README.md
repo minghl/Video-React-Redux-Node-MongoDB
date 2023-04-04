@@ -13,6 +13,8 @@ The website link is: https://mhtube.minghaodev.com
 
 The following picture is the outlook of this website:
 
+![Image text](show.png)
+
 Hope you like it ：)
 
 All best!
