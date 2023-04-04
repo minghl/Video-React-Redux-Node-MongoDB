@@ -11,4 +11,6 @@ This project used full-stack technologies to ahieve several functionalities incl
 
 The website link is: https://mhtube.minghaodev.com 
 
-Hope you like it!
+Hope you like it ：)
+
+All best!
