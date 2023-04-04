@@ -9,7 +9,9 @@ This project used full-stack technologies to ahieve several functionalities incl
 6. Classify the videos in different categories and show the videos your subcriptions.
 7. White and black modes.
 
-The website link is: https://mhtube.minghaodev.com 
+The website link is: https://mhtube.minghaodev.com
+
+The following picture is the outlook of this website:
 
 Hope you like it ：)
 
