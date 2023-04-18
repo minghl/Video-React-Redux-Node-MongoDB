@@ -7,11 +7,13 @@ This project used full-stack technologies to ahieve several functionalities incl
 4. Fuzzily search videos by title.
 5. Follow the video producers, like and dislike the videos.
 6. Classify the videos in different categories and show the videos your subcriptions.
-7. White and black modes.
+7. Light and dark modes.
 
 The website link is: https://mhtube.minghaodev.com
 
 The following picture is the outlook of this website:
+
+![Image text](show.png)
 
 Hope you like it ：)
 
